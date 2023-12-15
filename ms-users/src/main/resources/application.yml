@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: ms-users
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bakker-mercedes
+      client:
+        registration:
+          keycloak:
+            client-id: ms-users
+            authorization-grant-type: client_credentials
+            client-secret: hhafh0MiUJi0p2c6YNC3s0uPYz0EvwLj
+            token-uri: http://localhost:8080/realms/bakker-mercedes/protocol/openid-connect/token
+
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    enabled: false
+
+server:
+  port: 8081
+
+dh:
+  keycloak:
+    server-url: http://localhost:8080
+    clientId: app-admin
+    clientSecret: hhafh0MiUJi0p2c6YNC3s0uPYz0EvwLj
+    realm: bakker-mercedes
+
+
+
+
