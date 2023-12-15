@@ -1,0 +1,49 @@
+# Configuraciones del servidor
+server:
+  port: 8090
+# Configuraciones de eureka
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+# Configuraciones de spring cloud
+spring:
+  application:
+    name: ms-gateway
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuerUri: http://localhost:8080/realms/bakker-mercedes
+        registration:
+          keycloak:
+            clientId: api-gateway-client
+            clientSecret: s8P042qpRCOirSH7Ax586lshYS2UE71r
+            authorizationGrantType: authorization_code
+            scope:
+              - openid
+            redirectUri: http://oauth.pstmn.io/v1/browser-callback
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: ms-bill
+          uri: lb://ms-bill
+          predicates:
+            - Path=/api/v1/**
+          filters:
+            - StripPrefix=2
+
+        - id: ms-users
+          uri: lb://ms-users
+          predicates:
+            - Path=/api/v1/**
+          filters:
+            - StripPrefix=2
